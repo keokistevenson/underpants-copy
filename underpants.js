@@ -21,6 +21,9 @@ var _ = {};
 *   _.identity({a: "b"}) === {a: "b"}
 */
 
+_.identity = function(value) {
+    return value;
+}
 
 /** _.typeOf
 * Arguments:
@@ -42,6 +45,21 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
+_.typeOf = function(value) {
+    if (typeof value !== "object") {
+
+        var valueType = typeof value;
+
+        return valueType;
+
+    } else if (Array.isArray(value)) {
+            return "array";
+    } else if (value === null) {
+        return "null";
+    } else {
+        return "object";
+    }
+}
 
 /** _.first
 * Arguments:
@@ -209,6 +227,22 @@ var _ = {};
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
 
+_.map = function(collection, func) {
+
+    var result = [];
+    if (Array.isArray(collection)) {
+        for (var i = 0; i < collection.length; i++) {
+            result.push(func(collection[i], i, collection));
+        }
+    } else {
+        for(var key in collection) {
+            result.push(func(collection[key], key, collection));
+        }
+    }
+    return result;
+
+}
+
 
 /** _.pluck
 * Arguments:
@@ -221,6 +255,16 @@ var _ = {};
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
+/*
+_.pluck = function(array, property) {
+    var result;
+    var keys;
+    for(var x = 0; x < array.length; x++) {
+        keys = Object.keys(array[x]);
+         result = _.map(array[0], function(array[x][property],property, array[x]) { return array[x][property]} )
+    }
+}
+*/
 
 /** _.every
 * Arguments:
@@ -243,6 +287,25 @@ var _ = {};
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
+_.every = function(collection, funky) {
+    var result;
+
+    if (Array.isArray(collection)) {
+        for(var x = 0; x < collection.length; x++) {
+            result.push(funky(collection[x], x, collection));
+        }
+    } else {
+        for(var key in collection) {
+            result.push(funky(collection[key], key, collection));
+        }
+    }
+    if (result.includes(false)) {
+        return false;
+    } else {
+        return true;
+    }
+    
+}
 
 /** _.some
 * Arguments:
