@@ -255,16 +255,11 @@ _.map = function(collection, func) {
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
-/*
+
 _.pluck = function(array, property) {
-    var result;
-    var keys;
-    for(var x = 0; x < array.length; x++) {
-        keys = Object.keys(array[x]);
-         result = _.map(array[0], function(array[x][property],property, array[x]) { return array[x][property]} )
-    }
+   return _.map(array, function(object){return object[property];});
 }
-*/
+
 
 /** _.every
 * Arguments:
@@ -288,16 +283,42 @@ _.pluck = function(array, property) {
 */
 
 _.every = function(collection, funky) {
-    var result;
+    var result = [];
 
     if (Array.isArray(collection)) {
-        for(var x = 0; x < collection.length; x++) {
-            result.push(funky(collection[x], x, collection));
-        }
+      
+      if (funky === undefined) {
+        
+        for(var i = 0; i < collection.length; i++) {
+            if(collection[i]) {
+               result.push(true)
+             } else {
+               result.push(false)
+             }
+          }
+
+      } else {
+          for(var x = 0; x < collection.length; x++) {
+              result.push(funky(collection[x], x, collection));
+          }
+      }
     } else {
-        for(var key in collection) {
+      
+      if (funky === undefined) {
+           for(var k in collection) {
+
+             if(collection[k]) {
+               result.push(true)
+             } else {
+               result.push(false)
+             }
+          }       
+        
+      } else {
+          for(var key in collection) {
             result.push(funky(collection[key], key, collection));
-        }
+          }
+      }        
     }
     if (result.includes(false)) {
         return false;
@@ -328,6 +349,49 @@ _.every = function(collection, funky) {
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
 
+_.some = function(collection, func) {
+    var result;
+    if(Array.isArray(collection)) {
+
+        if (func === undefined) {
+
+            for (var i = 0; i < collection.length; i++) {
+                if (collection[i]) {
+                    return true;
+                }
+            }
+
+        } else {
+            for (var x = 0; x < collection.length; x++) {
+                result = func(collection[x], x, collection);
+                 
+                if (result) {
+                    return true;
+                }
+            }
+        }
+    } else {
+        if (func === undefined) {
+            for (var k in collection) {
+                if (collection[k]) {
+                    return true;
+                }
+            }
+
+        } else {
+             for (var key in collection) {
+                result = func(collection[key], key, collection);
+                if (result) {
+                     return true;
+                }
+            }
+        }
+    }
+    return false;
+
+
+}
+
 
 /** _.reduce
 * Arguments:
@@ -348,6 +412,25 @@ _.every = function(collection, funky) {
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
+_.reduce = function(array, func, seed) {
+
+    var x = 0;
+    if (seed === undefined) {
+        seed = array[0];
+        x = 1;
+    }
+    
+    var result = seed;
+    for ( x; x < array.length; x++) {
+        
+       result = func(result, array[x], x);
+    }
+
+    return result;
+
+}
+
+
 
 /** _.extend
 * Arguments:
@@ -363,6 +446,19 @@ _.every = function(collection, funky) {
 *   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
+
+__.extend = function(object1, ...moreObjects) {
+
+    for (var v = 0; v < moreObjects.length; v++) {
+      var nextObject = moreObjects[v];
+  
+      for (var prop in nextObject) {
+        object1[prop] = nextObject[prop];
+      }
+    }
+  
+    return object1;
+  }
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
